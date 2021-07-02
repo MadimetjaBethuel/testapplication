@@ -10,9 +10,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.got.testapplication.ml.RAmodel2;
+import com.got.testapplication.ml.TextClassificationV2;
+
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
 
-                    InputStream inputStream = assetManager.open("Data.pdf");
+                    InputStream inputStream = assetManager.open("AnnaKarenina.txt");
                     int size = inputStream.available();
                     byte[] buffer = new byte[size];
                     inputStream.read(buffer);
@@ -59,15 +67,43 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                classify(inputText.getText().toString());
+               // java.lang.AssertionError: Error occurred when initializing NLClassifier: Type mismatch for input tensor serving_default_dense_input:0. Requested STRING, got FLOAT32.
+               
 
-
-
+              classify(string);
 
 
 
 /*
+    #Error : The size of byte buffer and the shape do not match.
+                try {
+                    RAmodel2 model = RAmodel2.newInstance(getApplicationContext());
+                    String text = inputText.getText().toString();
 
+                    ByteBuffer byteBuffer = Charset.forName("UTF-8").encode(string);
+
+                    // Creates inputs for reference.
+                    TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 1}, DataType.FLOAT32);
+                    inputFeature0.loadBuffer(byteBuffer);
+
+                    // Runs model inference and gets result.
+                    RAmodel2.Outputs outputs = model.process(inputFeature0);
+                    TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+
+                    // Releases model resources if no longer used.
+                    model.close();
+                    String out = String.valueOf(outputFeature0.getBuffer());
+                    outputText.setText(out);
+                } catch (IOException e) {
+                    // TODO Handle the exception
+                }
+
+ */
+
+
+/*
+
+    #Error IN32 not supported
                 try {
                     TextClassificationV2 model = TextClassificationV2.newInstance(getApplicationContext());
                     String text = inputText.getText().toString();
@@ -91,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
- */
 
+*/
 
             }
 
@@ -112,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         Log.v(TAG, "onStart");
         handler.post(
                 () -> {
-                    client.load();
+                  client.load();
                 });
     }
     private void classify(final String text) {
@@ -121,14 +157,14 @@ public class MainActivity extends AppCompatActivity {
                     List<Result> results = client.classify(text);
 
 
-                    showResult(text, results);
+                    showResult(results);
                 });
     }
-    private void showResult(final String inputText, final List<Result> results) {
+    private void showResult(final List<Result> results) {
 
         runOnUiThread(
                 () -> {
-                    String textToShow = "Input: " + inputText + "\nOutput:\n";
+                    String textToShow = "\nOutput:\n";
                     for (int i = 0; i < results.size(); i++) {
                         Result result = results.get(i);
                         textToShow += String.format(result.getTitle() + (result.getConfidence()));
