@@ -7,7 +7,7 @@ public class Result implements Comparable<Result> {
 
 
     private final String title;
-    
+
     private final Float confidence;
 
     public Result(final String id, final String title, final Float confidence) {

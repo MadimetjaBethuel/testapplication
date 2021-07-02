@@ -2,6 +2,7 @@ package com.got.testapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -9,15 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.got.testapplication.ml.TextClassificationV2;
-
-import org.checkerframework.checker.units.qual.C;
-import org.tensorflow.lite.DataType;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
-
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import java.io.InputStream;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,14 +45,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-           //     classify(inputText.getText().toString());
+                String string = "";
+                AssetManager assetManager = getApplicationContext().getAssets();
+
+                try {
+
+                    InputStream inputStream = assetManager.open("Data.pdf");
+                    int size = inputStream.available();
+                    byte[] buffer = new byte[size];
+                    inputStream.read(buffer);
+                    string = new String(buffer);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+
+                classify(inputText.getText().toString());
 
 
 
 
 
 
-
+/*
 
                 try {
                     TextClassificationV2 model = TextClassificationV2.newInstance(getApplicationContext());
@@ -82,11 +91,17 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+ */
+
 
             }
 
 
+
+
         });
+
+
 
 
     }
