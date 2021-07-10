@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.got.testapplication.ml.RAmodel2;
-import com.got.testapplication.ml.TextClassificationV2;
+//import com.got.testapplication.ml.RAmodel2;
+//import com.got.testapplication.ml.TextClassificationV2;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
@@ -164,16 +164,16 @@ public class MainActivity extends AppCompatActivity {
 
         runOnUiThread(
                 () -> {
-                    String textToShow = "\nOutput:\n";
-                    for (int i = 0; i < results.size(); i++) {
-                        Result result = results.get(i);
-                        textToShow += String.format(result.getTitle() + (result.getConfidence()));
+                    String textToShow = "\nReading Age:\n";
+                        Result result = results.get(0);
+                        String confidence = Integer.toString(Math.round((result.getConfidence() * 100)));
+                        textToShow += String.format(result.getTitle() + " : " + confidence + "Percent confidence");
 
-                        textToShow += "--------\n";
+                        textToShow += "\n";
 
                         outputText.setText(textToShow);
                         // Extract confidence
-                    }
+
                 });
 
 
