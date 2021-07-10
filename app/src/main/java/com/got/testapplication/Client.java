@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Client {
     private static final String TAG = "TaskApi";
-    private static final String MODEL_PATH = "RAmodel2.tflite";
+    private static final String MODEL_PATH = "model.tflite";
 
     private final Context context;
 
